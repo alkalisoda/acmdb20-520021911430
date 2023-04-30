@@ -1,0 +1,34 @@
+# Lab2 Buffer Replacement and B+ Tree
+# Ex1 src/simpledb/BufferPool.java flushPage()
+    根据要求完成页的更新操作，对于 flushPage 函数，更新脏页并将脏页标记为非脏，这里需要在 HeapFile 和 HeapPage 中更新相关函数，在这个任务中为 markDirty()、isDirty() 和 writePage()
+    虽然一开始没有完成其他函数时该轮测试依然能够通过，但是会在后续实验中出现报错。
+    flushAllPages() 依次刷新页面即可，evictPage() 在缓冲满的时候刷新界面，一开始实现是只刷新一个页就返回，但是会在后续 testSplitRootPage 测试中报错，修改为刷新所有界面，通过测试。
+
+# Ex2 BTreeFile.findLeafPage()
+    依次比较键值，逐级下沉，判断节点类型，叶节点找到就返回，中间节点按键值大小左右遍历Entries。
+    实现时遇到bug，前两个测试为通过。
+    之前为了实现 LRU 策略将 Page 类略作修改，加入了获取时间戳的函数，BTreeLeafPage 中需要额外实现，不然会报错。
+    检查函数未能发现问题，注意到有函数需要另外实现，在 IndexPredicate.java Predicate.java 按照要求实现函数，测试通过。
+
+# Ex3 Splitting Pages
+    分为 splitLeafPage() 和 splitInternalPage()
+    对于 LeafPage 需要创建新的叶节点，利用reverseIterator() 分配一半元组到新节点。
+    然后更新左右兄弟关系，更新父亲节点关系，将中间节点复制到父节点更新指针，更新脏页。
+    对于 InternalPage, 操作类似，区别在于需要将中间 Entry “挤”到父节点
+    流程依然是创建新节点，分配Entry, 不设置左右兄弟关系，更新父节点内容和指针，更新脏页。
+    测试时报错，检查发现有 insertTuple 等函数未实现，按照要求实现函数, insertTuple 在 HeapFile 中 需要检查是否有空页，如果没有需要通过数据流写文件。
+    deleteTuple 不需要考虑，但是 insert 和 delete 都要更新脏页。
+    检查没有需要实现的函数时，还是没有通过测试，注意到报错在 testSplitRootPage 和 testSplitInternalPage
+    testSplitRootPage 报错信息在 evictPage 有输出，修改 evictPage() 函数，通过测试。
+    testSplitInternalPage 报错是函数输出与期望不一致，查看是否为算法问题，查看 splitInternalPage 未发现问题。检查 insertTuple 等函数，没有未实现的函数，也没有发现明显的算法问题。
+    检查 BTree 的其他函数， 发现 splitLeafPage 中有左右兄弟关系更新错误，修改之后通过测试。
+
+# Ex4 Redistributing Pages
+    分为 stealFromLeafPage(), stealFromLeftInternalPage() 和 stealFromRightInternalPage()
+    stealFromLeafPage() 实现为简单: 分配元组，复制中间键值到父节点，更新左右兄弟，更新指针，更新脏页即可。
+    stealFromLeftInternalPage() 和 stealFromRightInternalPage() 需要“旋转”实现更新儿子节点和中间节点的操作。
+
+# Ex5 Merging Pages
+    从兄弟节点复制，更新节点及指针，更新脏页，更新内部节点需要从父节点“拉”下中间节点。
+
+# 本次实验耗时四天，其中大部分时间在排查未实现函数以及测试错误。
