@@ -1,0 +1,18 @@
+# Ex1 Filter and Join 
+    上一个 Lab 中已经完成了 Predicate 的内容，按照提示完成其他文件中的函数。
+    Join 和 HashEquiJoin 中的实现方式相同。
+
+# Ex2 Aggregates
+    分别实现 Aggregate.jar, IntegerAggregator.jar 和 StringAggregator.jar
+    实现中包含 MAX, MIN,SUM,COUNT,AVG 方式，迭代器实现需要定义三个新的迭代器，继承 DbIterator.
+    实现时使用实现 StringAggregator 的 Iterator 的方式实现 AggregateIterator
+
+# Ex3 HeapFile Mutability
+    之前 Lab 中对于 HeapPage 和 HeapFile 中的 insertTuple 和 deleteTuple 已经完成
+    但是不够完善，无法通过测试。在删除时加入判断条件，查找删除不存在节点的情况。
+    原本的 BufferPool 中 insert 和 delete 时会判断是否 evict ,但是在测试时使得插入数量不正确，重新实现函数，测试通过。
+
+# Ex4 Insert and Delete
+    按照要求实现 Insert.jar 和 Delete.jar 将 child operator 读取的 tuples 加入或者删除。
+
+本次实验一共花费2天，主要花费在修改之前编写的 insert 和 delete 造成的冲突。

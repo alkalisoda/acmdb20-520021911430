@@ -1,0 +1,24 @@
+### Lab4 Query Optim
+
+# Ex1 IntHistogram
+
+按照提示完成 IntHistogram 类, estimateSelectivity 函数实现时, 先实现 LESS_THAN, 其他操作符调用已经定义了的操作符。
+
+# Ex2 TableStats
+
+按照提示实现构造函数，estimateSelectivity，estimateTableCardinality 函数。
+实现时调用 IntHistogram 中已经实现的内容。
+
+# Ex3 Join Cost Estimation
+
+按照提示实现 estimateJoinCost 和 estimateJoinCardinality 函数。
+实验时发现导入包失败，查找资料，询问助教和同学确认是编译时包冲突导致，删除原先的编译内容重新编译。
+重新编译时发现有其他文件使用了中文编码，把编码冲突的字符替换，不会影响数据库实现，重新实验，通过两个测试。
+
+# Ex4 Join Ordering
+
+按照提示实现 orderJoins 函数，通过 enumerateSubsets 生成子集合， computeCostAndCardOfSubplan 获取代价
+不断获取最优的策略并输入到 planCache。
+Ex3 和 Ex4 同时测试，遇到了上述编码和导包的问题。解决之后，测试通过。
+
+本次实验花了三到四天，所花时间主要在解决导包冲突的问题上。

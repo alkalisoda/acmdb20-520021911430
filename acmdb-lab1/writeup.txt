@@ -1,0 +1,48 @@
+# Ex1 Tuple TupleDesc
+1.1 src/simpledb/TupleDesc.java
+    TupleDesc 类中定义了一个 TDItem 类， 其中包含了 field 的类型和名字还有初始化以及类型转换操作。
+    在 TupleDesc 中加入一个 TDItem[] 列表 tdItem， 每个 TDItem 描述数据库的行，在类中定义迭代器等其他操作。
+1.2 src/simpledb/Tuple.java
+    Tuple 类中有一个 TupleDesc 对象 和 Field 对象列表，根据后面需要调用的函数加入一个 RecordId 对象。
+    函数编写时（包括其他文件中），使用循环调用变量时尽可能减少调用函数次数以提高效率。
+
+# Ex2 Catalog
+2.1 src/simpledb/Catalog.java
+    根据实验指导， 在 Catalog 中定义一个 Table 类， 每个 Tabel 类中包括一个数据库文件 file, 一个name, 一个 primary_key
+    在 Catalog 中定义一个哈希表来存储 Table 信息。 一开始定义函数时，没有注意要删除重复元素，只是返回最后一个查找到的元素，
+    测试时出现bug， 不能够返回正确的Id。 之后修改代码， 删除重复元素，为了避免由于删除元素导致表结构变化产生的bug， 使用迭代器实现删除操作。 
+
+# Ex3 BufferPool
+3.1 src/simpledb/BufferPool.java
+    为了避免锁的争用， buffer_pool 使用了 ConcurrentHashMap 对象， 其中储存了缓存的 Page 信息。
+    主要实现 getPage 函数， 如果查找到了 hashCode 则返回 code 对应的元素， 否则将 page 插入并返回page。
+    按照要求，当 buffer_pool 满了，则删除一个 page 并插入新 page。 使用 LRU 策略，查找 page 的时间戳，
+    删除最久没有使用的页。 为了实现这一功能， 在 Page 类中加入一个 getTimeStamp() 函数。 
+    为了查找时间戳和键值， 调用了 java.util.Set 类。
+
+# Ex4 HeapPage
+4.1 src/simpledb/HeapPageId.java
+    根据注释提示，HeapPageId 中包含 tableId 和 pgNo 两个参数。按照注释要求定义几个函数即可。
+
+4.2 src/simpledb/RecordID.java
+    根据提示， RecordID 类中有 PageId 和 tupleno 参数， 按照注释要求定函数。hasCode 由 pid 和 tupleno 组成字符串的hasCode决定。
+
+4.3 src/simpledb/HeapPage.java
+    除了 pid, td, header[], tuples[], 遍历和其他操作时需要知道 tuples per page.
+    初始化时需要检查是否有 IO 错误， 检查 tuple 是否超出 page 能容纳的数量。
+    根据指导，返回 tuple_per_page 和 header_size 等。 isSlotUsed 通过位运算判断是否使用过。
+    由于 page 中定义过 getTimeStamp , 在 HeapPage 中需要实现， 返回系统时间戳。
+
+# Ex5 HeapFile
+5.1 src/simpledb/HeapFile.java
+    HeapFile 中包含一个 file 对象， 一个 TupleDesc 对象 和一个 DbFileIterator 迭代器。
+    定义一个继承 DbFileIterator 的迭代器， 按照 DbFileIterator 中已经定义的函数编写实现。
+
+# Ex6 SeqScan
+6.1 src/simpledb/SeqScan.java
+    定义一个链表迭代器， 按照要求定义函数。
+
+# Discuss
+    任务前后花了4到5天时间配置环境、容器、编写代码以及debug。Catalog 编写时遇到一个bug，有时通过有事不能，检查出现问题的代码花费了较长时间，一开始是
+    发现没有替换重复的元素，之后发现在编写PageId时有一个比较函数编写出错，修改之后能够正常通过测试。
+

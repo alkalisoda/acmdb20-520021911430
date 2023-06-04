@@ -1,0 +1,25 @@
+# Lab5 Transactions
+
+## Ex1 Bufferpool.java
+
+    添加一个 Lock 类， 一个 LockManager 类。 LockManager 中包含S与X锁队列，并使用dependencyGraph
+    用以判断死锁。加入锁的时候判断锁的种类，根据 S X 进行判断。加入新的锁时查看是否成环以检查死锁。
+
+## Ex2 Lock Lifetime
+    getPage 时根据 perm 加读锁或者读写锁, deadlock 检查通过LockManager中的denpendency实现，因此加锁
+    以外的操作一样。
+    Heapfile.insertTuple 时处理释放锁。添加锁的操作在 getPage 中已经实现。
+
+## Ex3 Implementing NO STEAL
+## Ex4 Transactions
+    刷新非脏页。
+    完成 transactionComplete() 函数，扫描脏页，即写过的page，由于正在执行complete，因此涉及到的 transaction
+    都还没有释放锁，拥有读写锁的就是写了脏页的。如果commit就flush, 没脏就恢复。然后释放锁。
+
+## Ex5 Deadlocks and Aborts
+    对应的死锁操作在 LockManager 中使用dependencyGraph处理，有环就说明有死锁。
+
+本次lab耗时3天，花费时间最多在BTreeTest和TransactionTest中debug, 最后发现问题在两点 flushPage 中
+因为编辑器自动识别的功能输入 contains 直接回车了，而应该输入 containKeys ，因此无法通过。
+另一个bug是之前lab的坑，getPage中识别 evict 的条件一开始是 numPage < buffer_pool.size()，但是这样通不过
+TransactionTest, 因此改为 numPage == buffer_pool.size()， 最终通过。
